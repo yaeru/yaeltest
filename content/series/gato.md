@@ -1,12 +1,12 @@
 ---
-title: El gran Perro
+title: El elegante Gato
 description: Learning how to use @nuxt/ content to create a blog
 img: placeholder.png
 alt: my first blog post
 
 author:
-  name: Benjamin
-  bio: All about Benjamin
+  name: Mariana
+  bio: All about mariana
   image: placeholder.png
 
 tags: 

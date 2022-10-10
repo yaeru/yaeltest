@@ -1,8 +1,6 @@
 <template>
 	<div id="default">
 		<Navbar />
-		<div class="uk-container">
-			<Nuxt />
-		</div>
+		<Nuxt />
 	</div>
 </template>

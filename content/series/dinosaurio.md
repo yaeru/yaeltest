@@ -9,20 +9,9 @@ author:
   bio: All about Benjamin
   image: placeholder.png
 
-gallery:
-item: placeholder.png
-
-categories: [
-  {
-    'slug': 'Man'
-  },
-  {
-    'slug': 'Ropa'
-  },
-  {
-    'slug': 'Juguete'
-  },
-]
+tags: 
+  - reptil
+  - extinto
 
 pages: [
   {

@@ -2,35 +2,37 @@
 	<div>
 		<header class="uk-section uk-section-primary">
 			<div class="uk-container">
-				<div class="uk-grid" uk-grid>
-					<div class="uk-width-1-3@m">
-						<img :src="require(`~/assets/img/${serie.img}`)" :alt="serie.alt" v-if="serie.img" />
+				<div class="uk-grid uk-child-width-expand" uk-grid>
+					<div class="uk-width-medium">
+						<img :src="require(`~/assets/img/${serie.img}`)" :alt="serie.alt" class="uk-border-rounded" v-if="serie.img" />
 					</div>
-					<div class="uk-width-2-3@m">
-						<p>Actualizado: {{ formatDate(serie.updatedAt) }}</p>
+					<div>
 						<h1 class="uk-margin-remove-bottom">{{ serie.title }}</h1>
 						<p class="uk-text-lead uk-margin-small-top">{{ serie.description }}</p>
-						
-						<p v-if="serie.categories" class="uk-text-meta uk-text-uppercase">
-							<span v-for="category in serie.categories" :key="category.slug">
-								{{category.slug}} | 
+
+						<p>
+							<span v-for="tag in serie.tags" :key="id" class="uk-text-capitalize">
+								<NuxtLink :to="`/leer/tag/${tag}`">
+									<span>
+										{{ tag }}
+									</span> /
+								</NuxtLink>
 							</span>
 						</p>
+						
 						<a href="#leer" class="uk-button uk-button-primary" uk-scroll>Leer</a>
 					</div>
 				</div>
 			</div>
 		</header>
 
-		<section class="uk-section">
-			<div class="uk-container">
-				<!-- <pre>{{ serie }}</pre> -->
-
-				<div class="uk-grid" uk-grid>
-					<aside class="uk-width-1-3@m">
-						<div class="uk-card uk-background-muted uk-card-body">
+		<Section>
+			<div class="uk-grid" uk-grid>
+				<aside class="uk-width-1-3@m">
+					<div class="uk-card uk-background-muted uk-card-body">
 						<author :author="serie.author" v-if="serie.author" />
 						<hr>
+						<p>Actualizado: {{ formatDate(serie.updatedAt) }}</p>
 						<h4>Table of content</h4>
 						<nav>
 							<ul>
@@ -39,38 +41,49 @@
 								</li>
 							</ul>
 						</nav>
-						</div>
-					</aside>
-					<main class="uk-width-2-3@m">
-						<nuxt-content :document="serie" />
-					</main>
-				</div>
+					</div>
+				</aside>
+				<main class="uk-width-2-3@m">
+					<nuxt-content :document="serie" />
+				</main>
 			</div>
-		</section>
-		<section id="leer" class="uk-section">
-			<div class="uk-container">
-				<h2>Leer Serie</h2>
-				<ul v-if="serie.pages" class="uk-list">
-					<li v-for="page in serie.pages" :key="page.number">
-						<div :id="'page' + page.number">
-							<a :href="'#page' + page.number" uk-scroll>
-								<img :src="require(`~/assets/img/${page.url}`)" :alt="page.number"/>
-							</a>
-						</div>
-					</li>
-				</ul>
-			</div>
-		</section>
+		</Section>
+
+		<Section id="leer">
+			<template v-slot:title>
+				Leer Serie
+			</template>
+
+			<ul class="uk-list" v-if="serie.pages">
+				<li v-for="page in serie.pages" :key="page.number">
+					<div :id="'page' + page.number">
+						<a :href="'#page' + page.number" uk-scroll>
+							<img :src="require(`~/assets/img/${page.url}`)" :alt="page.number"/>
+						</a>
+					</div>
+				</li>
+			</ul>
+			<p class="uk-alert uk-alert-warning" v-else>
+				No hay paginas
+			</p>
+		</Section>
 	</div>
 </template>
 
 <script>
 	export default {
-		layout: 'productos',
 
 		async asyncData({ $content, params }) {
 			const serie = await $content('series', params.slug).fetch()
-			return { serie }
+			const tagsList = await $content('tags')
+			.only(['name', 'slug'])
+			.where({ name: { $containsAny: serie.tags } })
+			.fetch()
+			const tags = Object.assign({}, ...tagsList.map((s) => ({ [s.name]: s })))
+			return {
+				serie,
+				tags,
+			}
 		},
 		methods: {
 			formatDate(date) {

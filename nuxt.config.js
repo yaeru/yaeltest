@@ -38,7 +38,11 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-  '@nuxt/content'
+  '@nuxt/content',
+  ['nuxt-supabase', {
+    supabaseUrl: 'https://tkbgexurmondgifvubqi.supabase.co',
+    supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRrYmdleHVybW9uZGdpZnZ1YnFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjU0MzEzNjgsImV4cCI6MTk4MTAwNzM2OH0.TejHBb6IiSGhrQV4pA1LvSdYAkJCjbfU2CwN8ZvmWLg'
+  }]
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -48,4 +52,8 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   },
+
+  content: {
+    nestedProperties: ['author.name']
+  }
 }
